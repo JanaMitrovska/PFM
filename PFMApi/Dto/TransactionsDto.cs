@@ -7,7 +7,7 @@ namespace PFMApi.Dto
 {
     public class TransactionsDto
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string? BenificaryName { get; set; }
         public string Date { get; set; }
         public string Direction { get; set; }
@@ -16,5 +16,7 @@ namespace PFMApi.Dto
         public string Currency { get; set; }
         public int? Mcc { get; set; }
         public string Kind { get; set; }
+        public string CategoryCode { get; set; }
+
     }
 }

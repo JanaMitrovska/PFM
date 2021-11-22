@@ -38,7 +38,7 @@ namespace PFMApi.Data
             entities.Remove(entity);
         }
 
-        public async Task<T> GetById(int id)
+        public async Task<T> GetById(string id)
         {
             return await entities.FindAsync(id);
         }

@@ -67,5 +67,11 @@ namespace PFMApi.Services
 
             return false;
         }
+
+        public async Task<Categories> getCategoryByCode(string code) {
+
+            Categories toReturn = (Categories) _categoriesRepository.AsQueryable().Where(x => x.Code.Equals(code));
+            return toReturn;
+        }
     }
 }

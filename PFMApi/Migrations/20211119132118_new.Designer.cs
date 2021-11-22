@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PFMApi.Data;
@@ -9,9 +10,10 @@ using PFMApi.Data;
 namespace PFMApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211119132118_new")]
+    partial class @new
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,6 +32,9 @@ namespace PFMApi.Migrations
                     b.Property<string>("BenificaryName")
                         .HasColumnType("character varying(255)")
                         .HasMaxLength(255);
+
+                    b.Property<string>("CategoryCode")
+                        .HasColumnType("text");
 
                     b.Property<string>("Currency")
                         .IsRequired()
@@ -54,7 +59,15 @@ namespace PFMApi.Migrations
                     b.Property<int?>("Mcc")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("MccCodeCode")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("isSplited")
+                        .HasColumnType("boolean");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("MccCodeCode");
 
                     b.ToTable("Transactions");
                 });
@@ -78,6 +91,28 @@ namespace PFMApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("PFMApi.Data.Entitties.MccCodes", b =>
+                {
+                    b.Property<int>("Code")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("MerchanTtype")
+                        .HasColumnType("text");
+
+                    b.HasKey("Code");
+
+                    b.ToTable("MccCodes");
+                });
+
+            modelBuilder.Entity("PFMApi.Data.Entities.Transactions", b =>
+                {
+                    b.HasOne("PFMApi.Data.Entitties.MccCodes", "MccCode")
+                        .WithMany()
+                        .HasForeignKey("MccCodeCode");
                 });
 #pragma warning restore 612, 618
         }

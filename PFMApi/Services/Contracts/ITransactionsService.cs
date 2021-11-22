@@ -11,7 +11,8 @@ namespace PFMApi.Services.Contracts
     public interface ITransactionsService
     {
         Task<bool> AddTransactions(HttpRequest request);
-        Task<bool> DeleteTransactions(int id);
+        Task<Transactions> GetTransactionById(string Id);
+        Task<bool> DeleteTransactions(string id);
         Task<bool> UpdateTransactions(TransactionsDto transactionsDto);
         Task<PagedList<Transactions>> GetPagedListTransactions(QueryParams transactionsParams);
         Task<ICollection<TransactionsDto>> GetAllTransactions();

@@ -1,7 +1,9 @@
-﻿using PFMApi.Helpers;
+﻿using PFMApi.Data.Entitties;
+using PFMApi.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PFMApi.Data.Entities
 {   
@@ -23,9 +25,19 @@ namespace PFMApi.Data.Entities
         public string? Description { get; set; }
 
         [Required, MaxLength(3), MinLength(3)]
-        public string Currency { get; set; }    
+        public string Currency { get; set; }
+
+        [ForeignKey("MccCodes")]
         public int? Mcc { get; set; }
         [Required]
         public string Kind { get; set; }
-}
+
+       // public MccCodes MccCode { get; set; }
+
+        public string? CategoryCode { get; set; }
+
+       // public bool isSplited { get; set; }
+
+
+    }
 }

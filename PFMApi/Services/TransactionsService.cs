@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using TinyCsvParser;
 using System.IO;
 using System.Text;
+using System;
 
 namespace PFMApi.Services
 {
@@ -78,7 +79,7 @@ namespace PFMApi.Services
             return false;
         }
 
-        public async Task<bool> DeleteTransactions(int id)
+        public async Task<bool> DeleteTransactions(string id)
         {
             var dataFromDb = await _transactionsRepository.GetById(id);
             if (dataFromDb != null)
@@ -104,7 +105,8 @@ namespace PFMApi.Services
             if (dataFromDb != null)
             {
 
-                dataFromDb.BenificaryName = transactionsDto.BenificaryName; 
+                dataFromDb.BenificaryName = transactionsDto.BenificaryName;
+                dataFromDb.CategoryCode = transactionsDto.CategoryCode;
                 _transactionsRepository.Update(dataFromDb);
 
                 if (await _transactionsRepository.SaveAll())
@@ -122,9 +124,10 @@ namespace PFMApi.Services
             var query = _transactionsRepository.AsQueryable();
             query = query.OrderBy(x => x.BenificaryName);
 
-            // primer za filtriranje po Benificary - name
-            if (!string.IsNullOrEmpty(transactionsParams.Name))
-                query = query.Where(x => x.BenificaryName.Contains(transactionsParams.Name));
+            // filtriranje po datum
+            var dateFrom = Convert.ToDateTime(transactionsParams.FromDate);
+            var dateTo = Convert.ToDateTime(transactionsParams.ToDate);
+            if (dateFrom <= dateTo) query = query.Where(x => (DateTime)(object)x.Date >= dateFrom && (DateTime)(object)x.Date <= dateTo);
 
             return await PagedList<Transactions>.ToPagedList(query, transactionsParams.PageNumber, transactionsParams.PageSize);
         }
@@ -138,6 +141,13 @@ namespace PFMApi.Services
 
             return null; /*_mapper.Map<ICollection<TransactionsDto>>(dataFromDb);*/
 
+        }
+
+        public async Task<Transactions> GetTransactionById(string Id)
+        {
+            Transactions transaction = await _transactionsRepository.GetById(Id);
+
+            return transaction;
         }
     }
 }

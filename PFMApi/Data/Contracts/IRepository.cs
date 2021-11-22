@@ -6,7 +6,7 @@ namespace PFMApi.Data.Contracts
 {
     public interface IRepository<T> where T : class
     {
-        Task<T> GetById(int id);     
+        Task<T> GetById(string id);     
         Task<ICollection<T>> List();
         Task AddRange(ICollection<T> collection);
         Task Add(T entity);
